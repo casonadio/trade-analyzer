@@ -59,6 +59,140 @@
     <section id="uploadSection" class="fade-in">
       <div class="text-center mb-8">
         <h2 class="text-3xl font-bold text-surface-900 mb-3">Analyze Your Trading Behavior</h2>
+        <p class="text-surface-600 max-w-xl mx-auto">Upload your trade history CSV and get a detailed behavioral analysis of your trading psychology. Identify revenge trading, fear-based exits, euphoria patterns, and more.</p>
+      </div>
+      <div id="dropZone" class="max-w-xl mx-auto border-2 border-dashed border-surface-300 rounded-2xl p-12 text-center cursor-pointer hover:border-brand-400 transition-colors bg-white">
+        <div class="mb-4">
+          <svg class="w-12 h-12 mx-auto text-surface-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg>
+        </div>
+        <p class="text-surface-700 font-semibold mb-1">Drop your CSV here or click to browse</p>
+        <p class="text-sm text-surface-500">Supports Tradovate, Rithmic, NinjaTrader, and generic CSV formats</p>
+        <input type="file" id="fileInput" accept=".csv" class="hidden" />
+      </div>
+      <div class="max-w-xl mx-auto mt-6 bg-white rounded-xl border border-surface-200 p-5">
+        <p class="text-sm font-semibold text-surface-700 mb-2">Expected CSV columns:</p>
+        <p class="text-sm text-surface-500">Your CSV should include some combination of: Symbol, Side (Buy/Sell), Quantity, Entry Price, Exit Price, Entry Time, Exit Time, P&L, Commission. The analyzer will auto-detect your format.</p>
+      </div>
+    </section>
+    <section id="processingSection" class="hidden fade-in">
+      <div class="text-center py-20">
+        <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-brand-100 flex items-center justify-center pulse-ring">
+          <svg class="w-8 h-8 text-brand-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5"/></svg>
+        </div>
+        <h3 class="text-xl font-bold text-surface-900 mb-2">Analyzing your trades...</h3>
+        <p id="processingStatus" class="text-surface-500">Parsing CSV data</p>
+      </div>
+    </section>
+    <section id="reportSection" class="hidden fade-in">
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h2 class="text-2xl font-bold text-surface-900">Behavioral Analysis Report</h2>
+          <p id="reportMeta" class="text-sm text-surface-500 mt-1"></p>
+        </div>
+        <button onclick="resetApp()" class="px-4 py-2 text-sm font-medium text-brand-600 border border-brand-200 rounded-lg hover:bg-brand-50 transition-colors">New Analysis</button>
+      </div>
+      <div id="statsGrid" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8"></div>
+      <div id="insightsSection" class="mb-8">
+        <h3 class="text-lg font-bold text-surface-900 mb-4">Behavioral Insights</h3>
+        <div id="insightsList" class="space-y-3"></div>
+      </div>
+      <div class="grid md:grid-cols-2 gap-6 mb-8">
+        <div id="winLossSection" class="bg-white rounded-xl border border-surface-200 p-6">
+          <h3 class="text-base font-bold text-surface-900 mb-4">Win/Loss Breakdown</h3>
+          <div id="winLossContent"></div>
+        </div>
+        <div id="timeSection" class="bg-white rounded-xl border border-surface-200 p-6">
+          <h3 class="text-base font-bold text-surface-900 mb-4">Time Analysis</h3>
+          <div id="timeContent"></div>
+        </div>
+      </div>
+      <div id="douglasSection" class="bg-white rounded-xl border border-surface-200 p-6 mb-8">
+        <h3 class="text-base font-bold text-surface-900 mb-2">Trading Psychology Assessment</h3>
+        <p class="text-sm text-surface-500 mb-4">Core fears and developmental stage analysis</p>
+        <div id="douglasContent" class="space-y-4"></div>
+      </div>
+      <div id="edgeSection" class="bg-white rounded-xl border border-surface-200 p-6 mb-8">
+        <h3 class="text-base font-bold text-surface-900 mb-2">Edge Optimization</h3>
+        <p class="text-sm text-surface-500 mb-4">Where your edge actually lives vs where you're bleeding</p>
+        <div id="edgeContent" class="space-y-4"></div>
+      </div>
+      <div id="trajectorySection" class="bg-white rounded-xl border border-surface-200 p-6 mb-8">
+        <h3 class="text-base font-bold text-surface-900 mb-2">Your Trajectory</h3>
+        <p class="text-sm text-surface-500 mb-4">What your data says about where you're headed</p>
+        <div id="trajectoryContent" class="space-y-3"></div>
+      </div>
+      <div id="actionsSection" class="bg-brand-50 rounded-xl border border-brand-200 p-6">
+        <h3 class="text-base font-bold text-brand-900 mb-3">Recommended Actions</h3>
+        <div id="actionsList" class="space-y-2"></div>
+      </div>
+    </section>
+  </main>
+  <footer class="border-t border-surface-200 mt-16 py-6">
+    <div class="max-w-6xl mx-auto px-6 text-center text-sm text-surface-400">Trade Analyzer - Behavioral Trading Performance Analysis</div>
+  </footer>
+  <script src="https://lzaaskwgjnqvwttgccqo.supabase.co/functions/v1/app-js"></script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trade Analyzer - Behavioral Trading Analysis</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: { 50:'#f0f7ff', 100:'#e0effe', 200:'#bae0fd', 300:'#7ccbfc', 400:'#37b1f8', 500:'#0d97e9', 600:'#0178c7', 700:'#0160a1', 800:'#065185', 900:'#0b446e', 950:'#072b49' },
+            surface: { 50:'#f8fafc', 100:'#f1f5f9', 200:'#e2e8f0', 300:'#cbd5e1', 700:'#334155', 800:'#1e293b', 900:'#0f172a', 950:'#020617' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    .drag-over { border-color: #0d97e9 !important; background: #f0f7ff !important; }
+    .fade-in { animation: fadeIn 0.4s ease-out; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+    .pulse-ring { animation: pulseRing 1.5s cubic-bezier(0.215,0.61,0.355,1) infinite; }
+    @keyframes pulseRing { 0% { transform:scale(0.9); opacity:0.7; } 50% { transform:scale(1); opacity:1; } 100% { transform:scale(0.9); opacity:0.7; } }
+    .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px -5px rgba(0,0,0,0.1); }
+    .stat-card { transition: all 0.2s ease; }
+    .severity-high { border-left: 4px solid #ef4444; }
+    .severity-medium { border-left: 4px solid #f59e0b; }
+    .severity-low { border-left: 4px solid #22c55e; }
+    .severity-info { border-left: 4px solid #3b82f6; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+  </style>
+</head>
+<body class="bg-surface-50 min-h-screen">
+  <header class="bg-white border-b border-surface-200 sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 bg-brand-600 rounded-lg flex items-center justify-center">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold text-surface-900">Trade Analyzer</h1>
+          <p class="text-xs text-surface-500">Behavioral Performance Analysis</p>
+        </div>
+      </div>
+      <div id="headerStatus" class="text-sm text-surface-500 hidden">
+        <span class="inline-block w-2 h-2 bg-green-500 rounded-full mr-1.5"></span>Report ready
+      </div>
+    </div>
+  </header>
+  <main class="max-w-6xl mx-auto px-6 py-10">
+    <section id="uploadSection" class="fade-in">
+      <div class="text-center mb-8">
+        <h2 class="text-3xl font-bold text-surface-900 mb-3">Analyze Your Trading Behavior</h2>
         <p class="text-surface-600 max-w-xl mx-auto">Upload your trade history CSV and get a detailed behavioral analysis powered by Mark Douglas's framework. Identify revenge trading, fear-based exits, euphoria patterns, and more.</p>
       </div>
       <div id="dropZone" class="max-w-xl mx-auto border-2 border-dashed border-surface-300 rounded-2xl p-12 text-center cursor-pointer hover:border-brand-400 transition-colors bg-white">
